@@ -1,22 +1,28 @@
 #pragma once
 
 #include <cstdint>
-#include "Philosopher.hpp"
 #include <mutex>
 #include <condition_variable>
 #include <vector>
 #include <thread>
 #include <memory>
 
+#include "Philosopher.hpp"
 
-class DiningRoom {
+class DiningRoom
+{
     public:
-    DiningRoom(uint16_t philosophersNumber) : mPhilosophersNumber(philosophersNumber){
-        mPhilosophers.reserve(mPhilosophersNumber);
+    DiningRoom(uint16_t philosophersNumber) : mPhilosophersNumber(philosophersNumber)
+    {
         forks.reserve(mPhilosophersNumber);
-        for(int i = 0; i < mPhilosophersNumber; i++){
-            mPhilosophers.emplace_back(Philosopher(i, mPhilosophersNumber, forks, notifiers));
+        for(int i = 0; i < mPhilosophersNumber; i++)
+        {
             forks.emplace_back(std::make_unique<std::mutex>());
+        }
+        mPhilosophers.reserve(mPhilosophersNumber);
+        for(int i = 0; i < mPhilosophersNumber; i++)
+        {
+            mPhilosophers.emplace_back(Philosopher(i, mPhilosophersNumber, forks, notifiers));
         }
     };
 

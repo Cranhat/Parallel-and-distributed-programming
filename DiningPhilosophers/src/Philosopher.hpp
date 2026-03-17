@@ -7,36 +7,35 @@
 #include <string>
 #include <memory>
 
-enum State {
-    stopped,
-    started
-};
-
-enum InSimulationState{
+enum InSimulationState
+{
     waiting,
     eating,
     resting
 };
 
-class Philosopher {
+class Philosopher
+{
     public:
-    Philosopher(int index, int maxIndex, std::vector<std::unique_ptr<std::mutex>>& forks, std::vector<std::condition_variable>& notifiers) : mIndex(index), mMaxIndex(maxIndex), forks(forks), mNotifiers(notifiers){};
+    Philosopher(int index, int maxIndex, std::vector<std::unique_ptr<std::mutex>>& forks, std::vector<std::condition_variable>& notifiers) 
+    : index(index), maxIndex(maxIndex), forks(forks), notifiers(notifiers){};
 
     void run();
+    void gainResource();
 
-    bool gainResource();
     std::string getInSimulationState(); 
-    State state = started;
     std::thread thread;
-    int mIndex;
     InSimulationState inSimulationState = waiting;
     uint64_t resourcesConsumed = 0; 
+
+    int index;
+
     private:
-        int mMaxIndex;
-        int mLeftIndex = mIndex;
-        int mRightIndex = (mIndex + 1) % mMaxIndex;
-
-
         std::vector<std::unique_ptr<std::mutex>>& forks;
-        std::vector<std::condition_variable>& mNotifiers;
+        std::vector<std::condition_variable>& notifiers;
+
+        int maxIndex;
+        // reverse if last index
+        int leftFork = (index + 1) == maxIndex ? (index + 1) % maxIndex : index;
+        int rightFork = (index + 1) == maxIndex ? index : (index + 1) % maxIndex;
 };

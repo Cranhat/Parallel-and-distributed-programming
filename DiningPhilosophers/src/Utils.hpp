@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 
-int generateRandomNumber(int from, int to){
+inline int generateRandomNumber(int from, int to)
+{
     return rand() % (to  - from + 2) + from;
 };
