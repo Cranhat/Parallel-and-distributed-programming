@@ -12,27 +12,29 @@
 class DiningRoom
 {
     public:
-    DiningRoom(uint16_t philosophersNumber) : mPhilosophersNumber(philosophersNumber)
+    DiningRoom(uint16_t philosophersNumber) : philosophersNumber(philosophersNumber)
     {
-        forks.reserve(mPhilosophersNumber);
-        for(int i = 0; i < mPhilosophersNumber; i++)
+        forks.reserve(philosophersNumber);
+        for(int i = 0; i < philosophersNumber; i++)
         {
             forks.emplace_back(std::make_unique<std::mutex>());
         }
-        mPhilosophers.reserve(mPhilosophersNumber);
-        for(int i = 0; i < mPhilosophersNumber; i++)
+        philosophers.reserve(philosophersNumber);
+        for(int i = 0; i < philosophersNumber; i++)
         {
-            mPhilosophers.emplace_back(Philosopher(i, mPhilosophersNumber, forks, notifiers));
+            philosophers.emplace_back(Philosopher(i, philosophersNumber, forks));
         }
     };
+    ~DiningRoom(){
+        stop();
+    }
 
     void start();
     void stop();
     void printStates();
 
-    uint16_t mPhilosophersNumber;
-    std::vector<std::thread> mThreads;
-    std::vector<Philosopher> mPhilosophers;
+    uint16_t philosophersNumber;
+    std::vector<std::thread> threads;
+    std::vector<Philosopher> philosophers;
     std::vector<std::unique_ptr<std::mutex>> forks;
-    std::vector<std::condition_variable> notifiers;
 };

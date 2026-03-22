@@ -21,15 +21,12 @@ void Philosopher::run()
 
 void Philosopher::gainResource()
 {
-    (*forks[leftFork]).lock();
-    (*forks[rightFork]).lock();
+    std::lock_guard<std::mutex>(*forks[leftFork]);
+    std::lock_guard<std::mutex>(*forks[rightFork]);
 
     inSimulationState = eating;
     resourcesConsumed++;
     std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
-
-    (*forks[leftFork]).unlock();
-    (*forks[rightFork]).unlock();
 };
 
 std::string Philosopher::getInSimulationState()

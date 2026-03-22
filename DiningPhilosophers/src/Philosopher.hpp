@@ -17,8 +17,8 @@ enum InSimulationState
 class Philosopher
 {
     public:
-    Philosopher(int index, int maxIndex, std::vector<std::unique_ptr<std::mutex>>& forks, std::vector<std::condition_variable>& notifiers) 
-    : index(index), maxIndex(maxIndex), forks(forks), notifiers(notifiers){};
+    Philosopher(int index, int maxIndex, std::vector<std::unique_ptr<std::mutex>>& forks) 
+    : index(index), maxIndex(maxIndex), forks(forks){};
 
     void run();
     void gainResource();
@@ -27,13 +27,10 @@ class Philosopher
     std::thread thread;
     InSimulationState inSimulationState = waiting;
     uint64_t resourcesConsumed = 0; 
-
     int index;
 
     private:
         std::vector<std::unique_ptr<std::mutex>>& forks;
-        std::vector<std::condition_variable>& notifiers;
-
         int maxIndex;
         // reverse if last index
         int leftFork = (index + 1) == maxIndex ? (index + 1) % maxIndex : index;

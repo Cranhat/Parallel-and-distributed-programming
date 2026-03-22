@@ -5,15 +5,15 @@
 
 void DiningRoom::start()
 {
-    for(auto& philosopher : mPhilosophers)
+    for(auto& philosopher : philosophers)
     {
-        mThreads.push_back(std::thread(&Philosopher::run, &philosopher));
+        threads.push_back(std::thread(&Philosopher::run, &philosopher));
     } 
 };
 
 void DiningRoom::stop()
 {
-    for(auto& thread : mThreads)
+    for(auto& thread : threads)
     {
         thread.join();
     }
@@ -21,7 +21,7 @@ void DiningRoom::stop()
 
 void DiningRoom::printStates()
 {
-    for(auto& philospher : mPhilosophers)
+    for(auto& philospher : philosophers)
     {
         std::cout << "Philosopher " << philospher.index << " " << philospher.getInSimulationState() <<
         " resourceConsumed = " << philospher.resourcesConsumed << std::endl;
