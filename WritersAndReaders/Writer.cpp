@@ -7,17 +7,24 @@
 
 void Writer::run(){
     while(true){
-        write();
         state = WriterState::waiting;
-        std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(1000, 2000)));
+        write();
     }
 };
 
 void Writer::write(){
-    state = WriterState::writing;
-    auto book = books[0];
-    bookContent = book->write();
-    std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+    bool haveWritten = false;
+    while (!haveWritten) {
+        for (auto& book : books) {
+            if (book->tryWrite(state, bookContent)) {
+                haveWritten = true;
+                break;
+            }
+        }
+        if (!haveWritten) 
+            std::this_thread::sleep_for(std::chrono::milliseconds(100)); 
+    }
 };
 
 int Writer::getBookContent(){

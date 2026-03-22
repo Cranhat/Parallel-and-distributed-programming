@@ -5,9 +5,9 @@
 #include "Library.hpp"
 
 int main(int argc, char* argv[]){
-    int readersNumber = 2;
+    int readersNumber = 3;
     int writersNumber = 2;
-    int booksNumber = 1;
+    int booksNumber = 2;
     
     Library library(readersNumber, writersNumber, booksNumber);
     library.start();
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
     while(true){
         system("cls");
         library.printStates();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     library.stop();

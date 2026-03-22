@@ -9,12 +9,6 @@
 #include <unordered_map>
 #include "Book.hpp"
 
-enum class WriterState
-{
-    writing,
-    waiting
-};
-
 class Writer
 {
 public:

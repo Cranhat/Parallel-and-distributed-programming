@@ -1,60 +1,54 @@
 #include "Book.hpp"
 #include "util.hpp"
 
-BookContent Book::write() {
-    std::unique_lock<std::mutex> lock(mutex);
+bool Book::tryWrite(WriterState& state, BookContent& writtenContent) {
+    std::unique_lock<std::mutex> lock(mutex,  std::try_to_lock);
+    if (!lock || (readNumber < 3 && hasBeenWrittenInOnce)) 
+        return false;
 
-    if(hasBeenWrittenInOnce)
-        notifier.wait(lock, [this]() {  return readNumber >= 3; });
+    // if(hasBeenWrittenInOnce)
+    //     notifier.wait(lock, [this]() {  return readNumber >= 3; });
 
     resource.lock();
-    lock.unlock();
 
-    int numberToWrite = generateRandomNumber(0, 100);
-    content = numberToWrite;
-    BookContent writtenContent(index, numberToWrite);
+    content = generateRandomNumber(0, 100);
+    writtenContent.index = index;
+    writtenContent.content = content;
+    readNumber = 0;
     hasBeenWrittenInOnce = true;
-
-    std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+    state = WriterState::writing;
+    std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(1000, 3000)));
 
     resource.unlock();
-
-    lock.lock();
-    readNumber = 0;
     lock.unlock();
-
     notifier.notify_all();
 
-    return writtenContent;
+    return true;
 }
 
-BookContent Book::read() {
-    std::unique_lock<std::mutex> lock(mutex);
-    notifier.wait(lock, [this]() {  return hasBeenWrittenInOnce;   });
+bool Book::tryRead(ReaderState& state, BookContent& readContent) {
+    std::unique_lock<std::mutex> lock(mutex,  std::try_to_lock);
+    if (!lock || !hasBeenWrittenInOnce) 
+        return false;
 
+    //notifier.wait(lock, [this]() {  return hasBeenWrittenInOnce;   });
     readerCount++;
-    if (readerCount >= 1) resource.lock();
+    if (readerCount == 1) 
+        resource.lock();
     lock.unlock();
-    
-    BookContent readContent(index, content);
-    std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+
+    state = ReaderState::reading;
+    readContent.index = index;
+    readContent.content = content;
+    std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(1000, 2000)));
 
     lock.lock();
     readerCount--;
     readNumber++;
-    if (readerCount == 0) resource.unlock();
+    if (readerCount == 0) 
+        resource.unlock();
     lock.unlock();
     notifier.notify_all();
 
-    return readContent;
-}
-
-void Book::blockFromWriting(){
-    if(readerCount > 0)
-        resource.lock();
-}
-
-void Book::unblockFromWriting(){
-    if(readerCount == 0)
-        resource.unlock();
+    return true;
 }

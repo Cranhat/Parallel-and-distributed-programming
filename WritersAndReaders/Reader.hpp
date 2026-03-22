@@ -8,11 +8,6 @@
 #include <memory>
 #include <unordered_map>
 
-enum class ReaderState{
-    reading,
-    waiting
-};
-
 class Reader{
 public:
     Reader(int index, std::vector<std::shared_ptr<Book>>& books, std::vector<std::condition_variable>& notifiers) 
@@ -36,7 +31,7 @@ public:
     template<typename Person>
     friend std::string getState(Reader reader); 
 
-//private:
+private:
     std::vector<std::shared_ptr<Book>>& books;
     std::vector<std::condition_variable>& notifiers;
 };

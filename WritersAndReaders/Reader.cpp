@@ -7,17 +7,27 @@
 
 void Reader::run(){
     while(true){
-        read();
         state = ReaderState::waiting;
-        std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(1000, 2000)));
+        read();
     }
 };
 
 void Reader::read(){
-    state = ReaderState::reading;
-    auto book = books[0];
-    bookContent = book->read();
-    std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+    // auto book = books[0];
+    // bookContent = book->read(state, bookContent);
+
+    bool haveRead = false;
+    while (!haveRead) {
+        for (auto& book : books) {
+            if (book->tryRead(state, bookContent)) {
+                haveRead = true;
+                break;
+            }
+        }
+        if (!haveRead) 
+            std::this_thread::sleep_for(std::chrono::milliseconds(100)); 
+    }
 };
 
 int Reader::getBookContent(){

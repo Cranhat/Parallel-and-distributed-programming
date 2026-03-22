@@ -7,6 +7,17 @@
 #include <string>
 #include <memory>
 
+enum class ReaderState{
+    reading,
+    waiting
+};
+
+enum class WriterState
+{
+    writing,
+    waiting
+};
+
 struct BookContent{
     int index;
     int content;
@@ -18,13 +29,12 @@ class Book {
 public:
     Book(int index) : index(index), content(-1), readNumber(0), readerCount(0), hasBeenWrittenInOnce(false){}
 
-    BookContent write();
-    BookContent read();
-    void blockFromWriting();
-    void unblockFromWriting();
+    bool tryWrite(WriterState& state, BookContent& writtenContent);
+    bool tryRead(ReaderState& state, BookContent& readContent);
 
     int getIndex() const { return index; }
     int getContent() const { return content; }
+    int getReadNumber() const { return readNumber; }
 
 private:
     int index;

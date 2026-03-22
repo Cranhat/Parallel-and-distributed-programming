@@ -20,12 +20,12 @@ void Library::stop(){
 template<typename Person>
 void Library::printPersonState(Person& persons, std::string personName){
     for(auto& person : persons){
-    std::cout << personName << person.index << " is " ;
-    std::string state = getState(person);
-    if(state == "waiting")
-        std::cout << state << std::endl;
-    else    
-        std::cout << state << " \"" << person.getBookContent() << "\" in the book nr " << person.getBookNumber()  << std::endl; 
+        std::cout << personName << person.index << " is " ;
+        std::string state = getState(person);
+        if(state == "waiting")
+            std::cout << state << std::endl;
+        else    
+            std::cout << state << " \"" << person.getBookContent() << "\" in the book nr " << person.getBookNumber()  << std::endl; 
     }
 }
 
@@ -36,6 +36,6 @@ void Library::printStates(){
     std::cout << "\n";
 
     for(auto& book : books){
-        std::cout << "Book " << book->getIndex() << " contains \"" << book->getContent() << "\" \n"; 
+        std::cout << "Book " << book->getIndex() << " contains \"" << book->getContent() << "\" and has been read " << book->getReadNumber() << " times\n";
     }
 }
