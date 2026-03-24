@@ -6,6 +6,11 @@
 #include <thread>
 #include <string>
 #include <memory>
+#include <algorithm>
+#include <random>
+
+extern std::random_device rd;
+extern std::mt19937 g;
 
 enum class ReaderState{
     reading,

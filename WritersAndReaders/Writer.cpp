@@ -14,9 +14,11 @@ void Writer::run(){
 };
 
 void Writer::write(){
+    auto shuffledBooks = books;
+    std::shuffle(shuffledBooks.begin(), shuffledBooks.end(), g);
     bool haveWritten = false;
     while (!haveWritten) {
-        for (auto& book : books) {
+        for (auto& book : shuffledBooks) {
             if (book->tryWrite(state, bookContent)) {
                 haveWritten = true;
                 break;

@@ -14,12 +14,11 @@ void Reader::run(){
 };
 
 void Reader::read(){
-    // auto book = books[0];
-    // bookContent = book->read(state, bookContent);
-
+    auto shuffledBooks = books;
+    std::shuffle(shuffledBooks.begin(), shuffledBooks.end(), g);
     bool haveRead = false;
     while (!haveRead) {
-        for (auto& book : books) {
+        for (auto& book : shuffledBooks) {
             if (book->tryRead(state, bookContent)) {
                 haveRead = true;
                 break;

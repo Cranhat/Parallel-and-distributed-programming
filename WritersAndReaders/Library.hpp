@@ -22,11 +22,11 @@ class Library{
         
         readers.reserve(readersNumber);
         for(int i = 0; i < readersNumber; i++)
-            readers.emplace_back(i, books, notifiers);
+            readers.emplace_back(i, books);
         
         writers.reserve(writersNumber);
         for(int i = 0; i < writersNumber; i++)
-            writers.emplace_back(i, books, notifiers);
+            writers.emplace_back(i, books);
         
     };
 
@@ -44,5 +44,4 @@ class Library{
     std::vector<Reader> readers;
     std::vector<Writer> writers;
     std::vector<std::shared_ptr<Book>> books;
-    std::vector<std::condition_variable> notifiers;
 };

@@ -1,6 +1,9 @@
 #include "Book.hpp"
 #include "util.hpp"
 
+std::random_device rd;
+std::mt19937 g(rd());
+
 bool Book::tryWrite(WriterState& state, BookContent& writtenContent) {
     std::unique_lock<std::mutex> lock(mutex,  std::try_to_lock);
     if (!lock || (readNumber < 3 && hasBeenWrittenInOnce)) 
@@ -11,7 +14,7 @@ bool Book::tryWrite(WriterState& state, BookContent& writtenContent) {
 
     resource.lock();
 
-    content = generateRandomNumber(0, 100);
+    content = generateRandomNumber(0, 1000);
     writtenContent.index = index;
     writtenContent.content = content;
     readNumber = 0;

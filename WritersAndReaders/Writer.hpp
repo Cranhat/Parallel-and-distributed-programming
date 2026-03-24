@@ -12,8 +12,8 @@
 class Writer
 {
 public:
-    Writer(int index, std::vector<std::shared_ptr<Book>>& books, std::vector<std::condition_variable>& notifiers) 
-    : index(index), books(books), notifiers(notifiers), bookContent(-1,-1){};
+    Writer(int index, std::vector<std::shared_ptr<Book>>& books) 
+    : index(index), books(books), bookContent(-1,-1){};
 
     void run();
     void write();
@@ -35,5 +35,4 @@ public:
 private:
     BookContent bookContent;
     std::vector<std::shared_ptr<Book>>& books;
-    std::vector<std::condition_variable>& notifiers;
 };
