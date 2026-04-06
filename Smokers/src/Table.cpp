@@ -7,7 +7,7 @@ void Table::start()
 {
     for(auto& smoker : smokers)
     {
-        threads.push_back(std::thread(&Smoker::run, &smoker));
+        threads.push_back(std::thread(&Smoker::run, std::ref(smoker)));
     } 
 };
 

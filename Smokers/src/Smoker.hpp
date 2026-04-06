@@ -31,21 +31,22 @@ class Smoker
     public:
     Smoker(int index, std::counting_semaphore<MAX_SEMAPHORE_COUNT>& rammers, std::counting_semaphore<MAX_SEMAPHORE_COUNT>& matchboxes) 
     : index(index), rammers(rammers), matchboxes(matchboxes){};
-
+    ~Smoker(){
+        isOn = false;
+        
+    }
     void run();
     void getRammer();
     void getMatchbox();
     std::string getInSimulationState(); 
-    void advanceInSimulationState();
-    void toggleState();
 
     const int index;
-    std::thread thread;
     InSimulationState inSimulationState = waitingForRammer;
     SmokerState state;
     uint64_t cigarettersSmoked = 0; 
 
     private:
+        bool isOn = true;
         std::counting_semaphore<MAX_SEMAPHORE_COUNT>& rammers;
         std::counting_semaphore<MAX_SEMAPHORE_COUNT>& matchboxes;
 };

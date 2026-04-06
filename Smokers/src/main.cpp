@@ -8,7 +8,8 @@
 
 int main(int argc, char** argv)
 {
-    Table table(std::stoi(argv[1]), std::stoi(argv[2]), std::stoi(argv[3]));
+    Table table(18, 3, 2);
+    // Table table(std::stoi(argv[1]), std::stoi(argv[2]), std::stoi(argv[3]));
     table.start();
 
     while(true)

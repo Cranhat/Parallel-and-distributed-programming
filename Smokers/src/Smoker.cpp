@@ -9,9 +9,8 @@
 
 void Smoker::run()
 {
-    toggleState();
-
-    while(state == on)
+    isOn = true;
+    while(isOn)
     {
         inSimulationState = waitingForRammer;
         getRammer();
@@ -24,15 +23,6 @@ void Smoker::run()
         std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
     }
 };
-
-void Smoker::toggleState()
-{
-    if(state == on){
-        state = off;
-    }else{
-        state = on;
-    }
-}
 
 void Smoker::getRammer()
 {
@@ -63,7 +53,3 @@ std::string Smoker::getInSimulationState()
         default:                    return "invalidState      ";
     };
 };
-
-// void Smoker::advanceState(){
-    
-// }

@@ -22,16 +22,16 @@ class Table
     rammers{rammersCount},
     matchboxes{matchboxesCount}
     {
-        smokers.reserve(smokersNumber);
         for(int i = 0; i < smokersNumber; i++)
         {
-            smokers.emplace_back(Smoker(i, rammers, matchboxes));
+            smokers.push_back(Smoker(i, rammers, matchboxes));
         }
         
     };
     ~Table(){
         stop();
     }
+
     void start();
     void stop();
     void printStates();
