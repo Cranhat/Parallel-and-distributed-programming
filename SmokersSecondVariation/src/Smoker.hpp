@@ -37,14 +37,11 @@ class Smoker
 
     void run();
     std::string getInSimulationState(); 
-    void getPaper();
-    void getTobacco();
-    void getMatches();
     void releasePaper();
     void releaseTobacco();
     void releaseMatches();
     
-    const int index;
+    const uint index;
     uint cigarettesSmoked = 0; 
     SmokerInfiniteResources smokerInfiniteResources;
 

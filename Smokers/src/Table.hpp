@@ -7,24 +7,21 @@
 #include <semaphore>
 
 #include "Smoker.hpp"
-
-
-// Smoker(int index, std::counting_semaphore<MAX_SEMAPHORE_COUNT>& rammers, std::counting_semaphore<MAX_SEMAPHORE_COUNT>& matchboxes) 
-//     : index(index), rammers(rammers), matchboxes(matchboxes){};
+#include "Logger.hpp"
 
 class Table
 {
     public:
-    Table(uint16_t smokersNumber, uint16_t rammersCount, uint16_t matchboxesCount) :
+    Table(uint16_t smokersNumber, uint16_t tampersCount, uint16_t matchboxesCount) :
     smokersNumber(smokersNumber),
-    rammersCount(rammersCount),
+    tampersCount(tampersCount),
     matchboxesCount(matchboxesCount),
-    rammers{rammersCount},
+    tampers{tampersCount},
     matchboxes{matchboxesCount}
     {
         for(int i = 0; i < smokersNumber; i++)
         {
-            smokers.push_back(Smoker(i, rammers, matchboxes));
+            smokers.push_back(Smoker(i, tampers, matchboxes));
         }
         
     };
@@ -37,11 +34,12 @@ class Table
     void printStates();
 
     uint16_t smokersNumber;
-    uint16_t rammersCount;
+    uint16_t tampersCount;
     uint16_t matchboxesCount;
     std::vector<std::thread> threads;
     std::vector<Smoker> smokers;
-    std::counting_semaphore<MAX_SEMAPHORE_COUNT> rammers;
+    std::counting_semaphore<MAX_SEMAPHORE_COUNT> tampers;
     std::counting_semaphore<MAX_SEMAPHORE_COUNT> matchboxes;
 
+    Logger& logger = Logger::instance();
 };

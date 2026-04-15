@@ -11,10 +11,57 @@ void Smoker::run()
 {
     isOn = 1;
     while(isOn)
-    {
-        getPaper();
-        getTobacco();
-        getMatches();
+    {  
+        switch (static_cast<uint>(smokerInfiniteResources))
+        {
+        case  1: // paper
+            {
+            bool isTobaccoAquired;
+            bool isMatchesAquired;
+            do{
+                isTobaccoAquired = tobacco.try_acquire();
+                isMatchesAquired = matches.try_acquire();
+                if(isTobaccoAquired)
+                    tobacco.release();
+                if(isMatchesAquired)
+                    matches.release();
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            }while(not isTobaccoAquired and not isMatchesAquired);
+            break;
+            }
+        case  2: // tobacco
+            {
+            bool isPaperAcquired;
+            bool isMatchesAquired;
+            do{
+                isPaperAcquired = paper.try_acquire();
+                isMatchesAquired = matches.try_acquire();
+                if(isPaperAcquired)
+                    paper.release();
+                if(isMatchesAquired)
+                    matches.release();
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            }while(not isPaperAcquired and not isMatchesAquired);
+            break;
+            }
+        case  3: // matches
+            {
+            bool isPaperAcquired;
+            bool isTobaccoAcquired;
+            do{
+                isPaperAcquired = paper.try_acquire();
+                isTobaccoAcquired = tobacco.try_acquire();
+                if(isPaperAcquired)
+                    paper.release();
+                if(isTobaccoAcquired)
+                    matches.release();
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            }while(not isPaperAcquired and not isTobaccoAcquired);
+            break;
+        }
+        default:
+            break;
+        }
         inSimulationState = assembling;
         std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(0, 100)));
         cigarettesSmoked++;
@@ -26,29 +73,6 @@ void Smoker::run()
     }
 };
 
-void Smoker::getPaper()
-{
-    if(smokerInfiniteResources != SmokerInfiniteResources::paper){
-        inSimulationState = waitingForPaper;
-        paper.acquire();
-    }
-};
-
-void Smoker::getTobacco()
-{
-    if(smokerInfiniteResources != SmokerInfiniteResources::tobacco){
-        inSimulationState = waitingForTobacco;
-        tobacco.acquire();
-    }
-};
-
-void Smoker::getMatches()
-{
-    if(smokerInfiniteResources != SmokerInfiniteResources::matches){
-        inSimulationState = waitingForMatches;
-        matches.acquire();
-    }
-};
 void Smoker::releasePaper()
 {
     if(smokerInfiniteResources != SmokerInfiniteResources::paper){
@@ -69,6 +93,26 @@ void Smoker::releaseMatches()
         matches.release();
     }
 };
+
+// void Smoker::checkIfCanTake(){
+//     switch (static_cast<uint>(smokerInfiniteResources))
+//     {
+//     case  1: // paper
+//         // try acquire paper, if can wait
+//         paper.acquire();
+
+//         break;
+//     case  2: // tobacco
+//         // try acquire tobacco, if can wait
+//         break;
+//     case  3: // matches
+//        // try acquire matches, if can wait
+//         break;
+    
+//     default:
+//         break;
+//     }
+// }
 
 std::string Smoker::getInSimulationState()
 {

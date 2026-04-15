@@ -12,31 +12,31 @@ void Smoker::run()
     isOn = true;
     while(isOn)
     {
-        inSimulationState = waitingForRammer;
-        getRammer();
+        inSimulationState = waitingForTamper;
+        getTamper();
         inSimulationState = waitingForMatchbox;
         getMatchbox();
         inSimulationState = smoking;
-        std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(0, 50)));
         cigarettersSmoked++;
         inSimulationState = resting;
-        std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(0, 50)));
     }
 };
 
-void Smoker::getRammer()
+void Smoker::getTamper()
 {
-    rammers.acquire();
-    inSimulationState = usingRammer;
-    std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
-    rammers.release();
+    tampers.acquire();
+    inSimulationState = usingTamper;
+    std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(0, 50)));
+    tampers.release();
 };
 
 void Smoker::getMatchbox()
 {
     matchboxes.acquire();
     inSimulationState = usingMatchbox;
-    std::this_thread::sleep_for(std::chrono::microseconds(generateRandomNumber(0, 1000)));
+    std::this_thread::sleep_for(std::chrono::milliseconds(generateRandomNumber(0, 50)));
     matchboxes.release();
 };
 
@@ -44,8 +44,8 @@ std::string Smoker::getInSimulationState()
 {
     switch(inSimulationState)
     {
-        case waitingForRammer:      return "waitingForRammer  ";   
-        case usingRammer:           return "usingRammer       ";
+        case waitingForTamper:      return "waitingForTamper  ";   
+        case usingTamper:           return "usingTamper       ";
         case waitingForMatchbox:    return "waitingForMatchbox";
         case usingMatchbox:         return "usingMatchbox     ";
         case smoking:               return "smoking           ";

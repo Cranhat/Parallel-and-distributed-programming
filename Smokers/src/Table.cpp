@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <thread>
+#include <string>
 
 void Table::start()
 {
@@ -22,8 +23,7 @@ void Table::stop()
 void Table::printStates()
 {
     for(auto& smoker : smokers)
-    {
-        std::cout << "Smoker " << smoker.index << " " << smoker.getInSimulationState() <<
-        " resourceConsumed = " << smoker.cigarettersSmoked << std::endl;
+    {   
+        logger.log("Smoker " + std::to_string(smoker.index) + " " + smoker.getInSimulationState() + " resourceConsumed = " + std::to_string(smoker.cigarettersSmoked));
     }
 }
