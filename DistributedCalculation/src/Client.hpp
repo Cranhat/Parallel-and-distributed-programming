@@ -1,5 +1,9 @@
 #pragma once
 
-class Client {
+class Client{
+    public:
+    Client() = default;
+    ~Client(){};
 
+    void runClient();
 };

@@ -6,10 +6,14 @@
 #include <functional>
 #include <atomic>
 
+#include "Com_utils.hpp"
+
 class Server{
     public:
     Server(uint processCount) : processCount(processCount){};
     ~Server(){};
+
+    void runServer();
 
     void createTask(std::function<void(uint, uint)> func, uint from, uint to);
     void divideTasks(std::function<void(uint, uint)> func, uint from, uint to);

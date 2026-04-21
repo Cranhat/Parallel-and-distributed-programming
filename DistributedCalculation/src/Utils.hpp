@@ -1,7 +1,6 @@
 #pragma once
-
-#include <cstdlib>
-#include <chrono>
+#include <iostream>
+typedef unsigned int uint;
 
 inline uint generateRandomNumber(int from, int to)
 {

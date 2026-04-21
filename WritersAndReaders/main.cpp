@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
     while(true){
         system("cls");
         library.printStates();
-        std::this_thread::sleep_for(std::chrono::microseconds(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     library.stop();
